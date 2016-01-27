@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'netatmo/dl/version'
+require 'netatmo-dl/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "netatmo-dl"
-  spec.version       = Netatmo::Dl::VERSION
+  spec.version       = NetAtmoDL::VERSION
   spec.authors       = ["James Badger"]
   spec.email         = ["james@jamesbadger.ca"]
 
