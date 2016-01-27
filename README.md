@@ -2,6 +2,8 @@
 
 `netatmo-dl` is a library for downloading CSV or XLS data from your NetAtmo weather station. It does not support other NetAtmo API features at this time, only CSV/XLS download.
 
+Requires Ruby > 2.0.
+
 ## Installation
 
 Add this line to your application's Gemfile:
