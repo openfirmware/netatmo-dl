@@ -1,7 +1,12 @@
 module NetAtmoDL
+  Auth_Host = "https://auth.netatmo.com"
+  Login_Path = "/en-US/access/login"
+  Dashboard_Host = "https://my.netatmo.com"
+  GetMeasureCSV_Path = "/api/getmeasurecsv"
+
   class Simple
     def login(user:, password:)
-      conn = Faraday.new(url: "https://auth.netatmo.com") do |faraday|
+      conn = Faraday.new(url: Auth_Host) do |faraday|
         faraday.request :url_encoded
         faraday.use :cookie_jar
         faraday.adapter Faraday.default_adapter
@@ -14,14 +19,14 @@ module NetAtmoDL
     def getmeasurecsv(device_id:, module_id:, type:, startdate:, enddate:, format:)
       raise "No access token available - login first" unless @access_token
 
-      conn = Faraday.new(url: "https://my.netatmo.com") do |faraday|
+      conn = Faraday.new(url: Dashboard_Host) do |faraday|
         faraday.request :url_encoded
         faraday.use :cookie_jar
         faraday.adapter Faraday.default_adapter
       end
 
       response = conn.post do |req|
-        req.url "/api/getmeasurecsv"
+        req.url GetMeasureCSV_Path
         req.body = build_params({
           access_token: @access_token,
           device_id:    CGI::escape(device_id),
@@ -50,7 +55,7 @@ module NetAtmoDL
     end
 
     def get_access_token(connection:, csrf_token:, user:, password:)
-      response = connection.post("/en-US/access/login", {
+      response = connection.post(Login_Path, {
         ci_csrf_netatmo: CGI::escape(csrf_token),
         mail:            CGI::escape(user),
         pass:            CGI::escape(password),
@@ -67,7 +72,7 @@ module NetAtmoDL
     end
 
     def get_csrf_token(connection:, user:, password:)
-      response = connection.get("/en-US/access/login")
+      response = connection.get(Login_Path)
       raise "Failed to login" if response.status != 200
 
       cookies = response.headers["set-cookie"].split(", ")
