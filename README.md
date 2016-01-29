@@ -47,10 +47,10 @@ I suggest keeping your environment variables in an environment file like `$HOME/
 
 ```sh
     $ cat $HOME/.netatmo-dl
-    export $NETATMO_USER="you@example.com"
-    export $NETATMO_PASS="your-hopefully-better-password"
-    export $DEVICE="00:00:00:00:00:00"
-    export $MODULE="00:00:00:00:00:00"
+    export NETATMO_USER="you@example.com"
+    export NETATMO_PASS="your-hopefully-better-password"
+    export DEVICE="00:00:00:00:00:00"
+    export MODULE="00:00:00:00:00:00"
     $ source $HOME/.netatmo-dl && netatmo-dl --user=$NETATMO_USER --pass=$NETATMO_PASS --device=$DEVICE --module=$MODULE --output=$HOME/data/netatmo --start=2016-01-01T00:00:00Z --end=2016-01-01T00:06:00Z
 ```
 
