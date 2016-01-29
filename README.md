@@ -62,6 +62,19 @@ TODO: Add documentation about the library API.
 
 Because the `getmeasurecsv` API call does not seem to work with access tokens generated with OAuth2. So the library uses web login instead.
 
+### Where do I get my Device ID and Module IDs?
+
+The Device ID and Module IDs for your NetAtmo weather station can be retrieved from the [NetAtmo dashboard][Dashboard] or from the [NetAtmo API][getstationsdata].
+
+To download data from the base station, set the Module ID to be the same as the Device ID. To download from outdoor or other modules, the Device ID will correspond to the base station and the Module ID will correspond to the specific module.
+
+To find your Device ID, [from the dashboard][Dashboard] select the settings icon (a gear) and scroll down to find the Indoor Module MAC address. It should have the pattern `00:00:00:00:00:00`, with letters or numbers in each two-character set.
+
+Also in the same page, each other module will have a serial number of the pattern `h123456` or `i123456`. For outdoor modules starting with `h`, a serial number of `h123456` will make the MAC address will be `02:00:00:12:34:56`. For indoor modules starting with `i`, a serial number of `i123456`  will make the MAC address will be `03:00:00:12:34:56`.
+
+[Dashboard]: (https://my.netatmo.com/app/station)
+[getstationsdata]: (https://dev.netatmo.com/doc/methods/getstationsdata)
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
