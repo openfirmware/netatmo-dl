@@ -1,1 +1,80 @@
 #!/usr/bin/env ruby -KU
+require 'netatmo-dl'
+
+options = {}
+op = OptionParser.new do |opts|
+  opts.banner = "Usage: netatmo-dl [options]"
+
+  opts.on("--user=[USER]", "Account login") do |user|
+    options[:user] = user
+  end
+
+  opts.on("--pass=[PASS]", "Account password") do |pass|
+    options[:pass] = pass
+  end
+
+  opts.on("--device=[ID]", "Device ID") do |device_id|
+    options[:device] = device_id
+  end
+
+  opts.on("--module=[ID]", "Module ID") do |module_id|
+    options[:module] = module_id
+  end
+
+  opts.on("--output=[PATH]", "Output Directory") do |output|
+    options[:output] = output
+  end
+
+  opts.on("--start=[TIMESTAMP]", "Start date/time") do |start_date|
+    options[:start] = start_date
+  end
+
+  opts.on("--end=[TIMESTAMP]", "End date/time") do |end_date|
+    options[:end] = end_date
+  end
+end
+
+op.parse! ARGV
+
+[:user, :pass, :device, :module, :output, :start, :end].each do |opt|
+  puts "Missing switch: --#{opt.to_s}" if options[opt].nil?
+end
+
+[:user, :pass, :device, :module, :output, :start, :end].each do |opt|
+  if options[opt].nil?
+    puts op.help
+    exit(1)
+  end
+end
+
+
+n = NetAtmoDL::Simple.new
+puts "Logging in…"
+n.login(user: options[:user], password: options[:pass])
+
+device_id           = options[:device]
+module_id           = options[:module]
+date_begin          = DateTime.iso8601(options[:start])
+date_end            = DateTime.iso8601(options[:end])
+output_dir          = options[:output]
+observed_properties = %w{Temperature Humidity Co2 Pressure Noise}.join(",")
+output_format       = "csv"
+
+# split date range to 1-day intervals
+date_begin.step(date_end, 1).each do |step_begin|
+  step_end = step_begin + 1
+
+  puts "Downloading for #{device_id}/#{module_id}…"
+  csv_data = n.getmeasurecsv(
+    device_id: device_id,
+    module_id: module_id,
+    type:      observed_properties,
+    startdate: step_begin,
+    enddate:   step_end,
+    format:    output_format
+  )
+
+  # Some filesystems don't like colons in filenames
+  filename = %Q{#{module_id.gsub(/:/, "-")}-#{step_begin.to_s}.csv}
+  IO.write(File.join(output_dir, filename), csv_data)
+end

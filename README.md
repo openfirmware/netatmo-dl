@@ -2,7 +2,7 @@
 
 `netatmo-dl` is a library for downloading CSV or XLS data from your NetAtmo weather station. It does not support other NetAtmo API features at this time, only CSV/XLS download.
 
-Requires Ruby > 2.0.
+Requires Ruby 2.0 or newer.
 
 ## Installation
 
@@ -32,7 +32,7 @@ Here is an example that reads the username/password from the shell environment, 
 
 ```sh
     $ mkdir $HOME/data/netatmo
-    $ netatmo-dl --user=$NETATMO_USER --pass=$NETATMO_PASS --device=$DEVICE --module=$MODULE --output-directory=$HOME/data/netatmo --start=2016-01-01T00:00:00Z --end=2016-01-01T00:06:00Z
+    $ netatmo-dl --user=$NETATMO_USER --pass=$NETATMO_PASS --device=$DEVICE --module=$MODULE --output=$HOME/data/netatmo --start=2016-01-01T00:00:00Z --end=2016-01-01T00:06:00Z
 ```
 
 * `user`: email address you use to login to NetAtmo
@@ -51,7 +51,7 @@ I suggest keeping your environment variables in an environment file like `$HOME/
     export $NETATMO_PASS="your-hopefully-better-password"
     export $DEVICE="00:00:00:00:00:00"
     export $MODULE="00:00:00:00:00:00"
-    $ source $HOME/.netatmo-dl && netatmo-dl --user=$NETATMO_USER --pass=$NETATMO_PASS --device=$DEVICE --module=$MODULE --output-directory=$HOME/data/netatmo --start=2016-01-01T00:00:00Z --end=2016-01-01T00:06:00Z
+    $ source $HOME/.netatmo-dl && netatmo-dl --user=$NETATMO_USER --pass=$NETATMO_PASS --device=$DEVICE --module=$MODULE --output=$HOME/data/netatmo --start=2016-01-01T00:00:00Z --end=2016-01-01T00:06:00Z
 ```
 
 **PRO TIP**: Do not run the tool too frequently as NetAtmo only updates the data every five minutes. In fact, you may want to run the tool only once per day to archive the data. If you need more frequent data access, you may have to build your own library to connect to the [NetAtmo API](https://dev.netatmo.com/doc).
